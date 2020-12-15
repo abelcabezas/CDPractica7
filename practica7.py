@@ -125,7 +125,26 @@ def get_most_common_weather_condition():
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
+def get_visibility_occurrences_under_threshold(threshold):
+    start = timer()
+    spark_session = SparkSession \
+        .builder \
+        .appName("CarAccidents_Spark_4") \
+        .getOrCreate()
+    sc = spark_session._sc
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents = sc.textFile(car_accidents_file)
+    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: s < float(threshold))
 
+    sqlContext = SQLContext(sc)
+    schemaWeather = sqlContext.createDataFrame(incidents_under_v)
+    schemaWeather.show()
+    end = timer()
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
+    # for result in max_severities:
+    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    spark_session.stop()
 if __name__  == "__main__":
     if len(sys.argv) != 1 and len(sys.argv) !=2:
         print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
@@ -140,6 +159,6 @@ if __name__  == "__main__":
         elif sys.argv[1] == "4":
             get_most_common_weather_condition()
         elif sys.argv[1] == "5":
-            pass
+            get_visibility_occurrences_under_threshold(sys.argv[2])
     else:
         print("Error no arguments provided")
