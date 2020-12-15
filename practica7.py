@@ -48,12 +48,13 @@ def get_medium_distance():
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
     count = media.map(lambda value: ("media", value )).reduceByKey(add)
+    '''
     media_columns = count.map(
         lambda p: Row(media=p[0], valor=float(p[1])))
     sqlContext = SQLContext(sc)
     schemaMedia = sqlContext.createDataFrame(media_columns)
     sqlContext.select("media").show()
-
+    '''
     numero_de_registros = car_accidents.count()
     print("Suma:"+str(numero_de_registros))
     end = timer()
