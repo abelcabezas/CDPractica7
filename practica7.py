@@ -48,22 +48,15 @@ def get_medium_distance():
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
     count = media.map(lambda value: ("media", value )).reduceByKey(add)
+    '''
     media_columns = count.map(
         lambda p: Row(media=p[0], valor=float(p[1])))
     sqlContext = SQLContext(sc)
     schemaMedia = sqlContext.createDataFrame(media_columns)
-    schemaSide.registerTempTable("medium")
+    sqlContext.select("media").show()
     '''
-    print("Los diferentes tipos de severidad son:")
-    sqlContext.sql(
-        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
-    '''
-    print("El lado de la calle mas comun es: ")
-    sqlContext.sql(
-        "SELECT media FROM medium").show()
-
     numero_de_registros = car_accidents.count()
-    print("Numero de registros:" +str(numero_de_registros))
+    print("Numero de registros:"+str(numero_de_registros))
     end = timer()
     elapsed=end - start
     print("Tiempo total: "+str(elapsed)+" segundos")
