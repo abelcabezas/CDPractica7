@@ -6,23 +6,31 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext, Row, SparkSession
 
 def get_most_common_severity():
-    spark_session= SparkSession\
-        .builder\
-        .appName("CarAccidents_Spark_01")\
+    spark_session = SparkSession \
+        .builder \
+        .appName("CarAccidents_Spark_1") \
         .getOrCreate()
-    sc= spark_session.__sc
-    car_accidents_file="/user/practica7/preprocessed_car_accidents.csv"
+    sc = spark_session._sc
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    severity= car_accidents.map(lambda s: s.split(",")[0])
+    severity = car_accidents.map(lambda s: s.split(",")[0])
     count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add)
-    severity_columns = count.map(lambda p: Row(severity=p[0],cuenta=int(p[1])))
+    severity_columns = count.map(
+        lambda p: Row(severidad=p[0], ocurrencias=int(p[1])))
     sqlContext = SQLContext(sc)
-    schemaSeverity =  sqlContext.createDataFrame(severity_columns)
-    schemaSeverity.registerTempTable("ocurrencias")
-    print("Los diferentes tipos de severidad son: ")
-    sqlContext.sql("SELECT severity, cuenta FROM ocurrencias order by cuenta DESC").show()
+    schemaSeverity = sqlContext.createDataFrame(severity_columns)
+    schemaSeverity.registerTempTable("severidades")
+    '''
+    print("Los diferentes tipos de severidad son:")
+    sqlContext.sql(
+        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
+    '''
     print("La severidad mas comun es: ")
-    sqlContext.sql("SELECT severity, cuenta FROM ocurrencias order by cuenta DESC limit 1")
+    sqlContext.sql("SELECT severidad, ocurrencias FROM severidades order by cuenta DESC limit 1").show()
+
+    # for result in max_severities:
+    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    spark_session.stop()
 
 def get_medium_distance():
     spark_session = SparkSession \
@@ -67,6 +75,9 @@ def get_most_common_side():
         "SELECT side, cuenta FROM ocurrencias order by cuenta DESC limit 1")
 
 if __name__  == "__main__":
+    if len(sys.argv) != 1 or len(sys.argv) !=2:
+        print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
+
     if sys.argv[1]:
         if sys.argv[1] == "1":
             get_most_common_severity()
