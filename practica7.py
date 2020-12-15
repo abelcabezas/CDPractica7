@@ -79,7 +79,32 @@ def get_most_common_side():
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
+def get_most_common_weather_condition():
+    spark_session = SparkSession \
+        .builder \
+        .appName("CarAccidents_Spark_4") \
+        .getOrCreate()
+    sc = spark_session._sc
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents = sc.textFile(car_accidents_file)
+    weather_condition = car_accidents.map(lambda s: s.split(",")[3])
+    count = weather_condition.map(lambda condicion: (condicion, 1)).reduceByKey(add)
+    weather_condition_columns = count.map(
+        lambda p: Row(condicion_climatica=p[0], ocurrencias=int(p[1])))
+    sqlContext = SQLContext(sc)
+    schemaWeather = sqlContext.createDataFrame(severity_columns)
+    schemaWeather.registerTempTable("condiciones_climaticas")
+    '''
+    print("Los diferentes tipos de severidad son:")
+    sqlContext.sql(
+        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
+    '''
+    print("La severidad mas comun es: ")
+    sqlContext.sql("SELECT condicion_climatica, ocurrencias FROM condiciones_climaticas order by ocurrencias DESC limit 1").show()
 
+    # for result in max_severities:
+    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    spark_session.stop()
 if __name__  == "__main__":
     if len(sys.argv) != 1 and len(sys.argv) !=2:
         print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
@@ -92,7 +117,7 @@ if __name__  == "__main__":
         elif sys.argv[1] == "3":
             get_most_common_side()
         elif sys.argv[1] == "4":
-            pass
+            get_most_common_weather_condition()
         elif sys.argv[1] == "5":
             pass
     else:
