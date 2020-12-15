@@ -129,7 +129,7 @@ def get_visibility_occurrences_under_threshold(threshold):
     start = timer()
     spark_session = SparkSession \
         .builder \
-        .appName("CarAccidents_Spark_4") \
+        .appName("CarAccidents_Spark_5") \
         .getOrCreate()
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
