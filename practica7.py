@@ -47,7 +47,7 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
-    count = media.map(lambda value: ("Media", value)).reduceByKey(add)
+    count = media.map(lambda value: ("Media", value))
 
     '''
     media_columns = count.map(
