@@ -92,7 +92,7 @@ def get_most_common_weather_condition():
     weather_condition_columns = count.map(
         lambda p: Row(condicion_climatica=p[0], ocurrencias=int(p[1])))
     sqlContext = SQLContext(sc)
-    schemaWeather = sqlContext.createDataFrame(severity_columns)
+    schemaWeather = sqlContext.createDataFrame(weather_condition_columns)
     schemaWeather.registerTempTable("condiciones_climaticas")
     '''
     print("Los diferentes tipos de severidad son:")
