@@ -26,7 +26,7 @@ def get_most_common_severity():
         "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
     '''
     print("La severidad mas comun es: ")
-    sqlContext.sql("SELECT severidad, ocurrencias FROM severidades order by cuenta DESC limit 1").show()
+    sqlContext.sql("SELECT severidad, ocurrencias FROM severidades order by ocurrencias DESC limit 1").show()
 
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
@@ -75,9 +75,9 @@ def get_most_common_side():
         "SELECT side, cuenta FROM ocurrencias order by cuenta DESC limit 1")
 
 if __name__  == "__main__":
-    if len(sys.argv) != 1 or len(sys.argv) !=2:
+    if len(sys.argv) != 1 and len(sys.argv) !=2:
         print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
-
+        sys.exit(-1)
     if sys.argv[1]:
         if sys.argv[1] == "1":
             get_most_common_severity()
