@@ -56,6 +56,7 @@ def get_medium_distance():
     schemaMedia = sqlContext.createDataFrame(media_columns)
     sqlContext.select("media").show()
     '''
+    print("Tipo de var count: " + str(type(count)))
     print("Tipo de media: "+str(type(media)))
     numero_de_registros = car_accidents.count()
     print("Numero de registros:"+str(numero_de_registros))
