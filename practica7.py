@@ -90,7 +90,7 @@ if __name__  == "__main__":
         elif sys.argv[1] == "2":
             get_medium_distance()
         elif sys.argv[1] == "3":
-            pass
+            get_most_common_side()
         elif sys.argv[1] == "4":
             pass
         elif sys.argv[1] == "5":
