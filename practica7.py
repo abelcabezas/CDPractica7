@@ -146,9 +146,7 @@ def get_visibility_occurrences_under_threshold(threshold):
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
 if __name__  == "__main__":
-    if len(sys.argv) != 1 and len(sys.argv) !=2:
-        print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
-        sys.exit(-1)
+
     if sys.argv[1]:
         if sys.argv[1] == "1":
             get_most_common_severity()
