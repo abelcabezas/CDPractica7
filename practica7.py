@@ -134,11 +134,11 @@ def get_visibility_occurrences_under_threshold(threshold):
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: s < float(threshold))
+    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) < float(threshold))
 
     sqlContext = SQLContext(sc)
-    schemaWeather = sqlContext.createDataFrame(incidents_under_v)
-    schemaWeather.show()
+    schemaUnderThreshold = sqlContext.createDataFrame(incidents_under_v)
+    schemaUnderThreshold.show()
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
