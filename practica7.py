@@ -6,7 +6,6 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext, Row, SparkSession
 
 def get_most_common_severity():
-
     spark_session= SparkSession\
         .builder\
         .appName("CarAccidents_Spark_01")\
@@ -14,7 +13,8 @@ def get_most_common_severity():
     sc= spark_session.__sc
     car_accidents_file="/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    count = car_accidents.map(lambda severidad: (severidad, 1)).reduceByKey(add)
+    severity= car_accidents.map(lambda s: s.split(",")[0])
+    count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add)
     severity_columns = count.map(lambda p: Row(severity=p[0],cuenta=int(p[1])))
     sqlContext = SQLContext(sc)
     schemaSeverity =  sqlContext.createDataFrame(severity_columns)
@@ -24,16 +24,54 @@ def get_most_common_severity():
     print("La severidad mas comun es: ")
     sqlContext.sql("SELECT severity, cuenta FROM ocurrencias order by cuenta DESC limit 1")
 
+def get_medium_distance():
+    spark_session = SparkSession \
+        .builder \
+        .appName("CarAccidents_Spark_02") \
+        .getOrCreate()
+    sc = spark_session.__sc
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents = sc.textFile(car_accidents_file)
+    severity = car_accidents.map(lambda s: s.split(",")[1])
+    count = severity.map(lambda severidad: ("media", 1)).reduceByKey(add)
+    severity_columns = count.map(
+        lambda p: Row(media=p[0], cuenta=int(p[1])))
+    sqlContext = SQLContext(sc)
+    schemaMedian = sqlContext.createDataFrame(severity_columns)
+    schemaMedian.registerTempTable("ocurrencias")
+    print("La distancia media en la que ocurren los accidentes es: ")
+    sqlContext.sql(
+        "SELECT media, cuenta FROM ocurrencias order by cuenta DESC limit 1").show()
 
 
-
+def get_most_common_side():
+    spark_session = SparkSession \
+        .builder \
+        .appName("CarAccidents_Spark_03") \
+        .getOrCreate()
+    sc = spark_session.__sc
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents = sc.textFile(car_accidents_file)
+    severity = car_accidents.map(lambda s: s.split(",")[2])
+    count = severity.map(lambda side: (severidad, 1)).reduceByKey(add)
+    severity_columns = count.map(
+        lambda p: Row(side=p[0], cuenta=int(p[1])))
+    sqlContext = SQLContext(sc)
+    schemaOcurences = sqlContext.createDataFrame(severity_columns)
+    schemaOcurences.registerTempTable("ocurrencias")
+    print("Los diferentes lados de la calle son: ")
+    sqlContext.sql(
+        "SELECT side, cuenta FROM ocurrencias order by cuenta DESC").show()
+    print("El lado de la calle  mas comun es: ")
+    sqlContext.sql(
+        "SELECT side, cuenta FROM ocurrencias order by cuenta DESC limit 1")
 
 if __name__  == "__main__":
     if sys.argv[1]:
         if sys.argv[1] == "1":
             get_most_common_severity()
         elif sys.argv[1] == "2":
-            pass
+            get_medium_distance()
         elif sys.argv[1] == "3":
             pass
         elif sys.argv[1] == "4":
