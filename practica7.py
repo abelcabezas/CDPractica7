@@ -60,7 +60,7 @@ def get_most_common_side():
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    side = car_accidents.map(lambda s: s.split(",")[0])
+    side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
     side_columns = count.map(
         lambda p: Row(lado=p[0], ocurrencias=int(p[1])))
