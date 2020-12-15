@@ -44,18 +44,20 @@ def get_medium_distance():
         .appName("CarAccidents_Spark_2") \
         .getOrCreate()
     sc = spark_session._sc
-    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
     count = media.map(lambda value: ("media", value )).reduceByKey(add)
-    print("Suma:")
-    count.count().show()
+    numero_de_registros = car_accidents_file.count()
+    print("Suma:"+str(numero_de_registross))
+
     end = timer()
     elapsed=end - start
     print("Tiempo total: "+str(elapsed)+" segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
+
 def get_most_common_side():
     start = timer()
     spark_session = SparkSession \
