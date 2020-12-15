@@ -46,16 +46,18 @@ def get_medium_distance():
     sc = spark_session._sc
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    media = car_accidents.map(lambda s: s.split(",")[1])
+    media = car_accidents.map(lambda s: s.split(",")[1]).sum
+    '''
     count = media.map(lambda value: ("media", value )).sum
+    
 
     media_columns = count.map(
         lambda p: Row(media=p[0], valor=float(p[1])))
     sqlContext = SQLContext(sc)
     schemaMedia = sqlContext.createDataFrame(media_columns)
     sqlContext.select("media").show()
-
-    print("Tipo de count: "+str(type(count)))
+    '''
+    print("Tipo de media: "+str(type(media)))
     numero_de_registros = car_accidents.count()
     print("Numero de registros:"+str(numero_de_registros))
     end = timer()
