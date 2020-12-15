@@ -38,25 +38,24 @@ def get_most_common_severity():
     spark_session.stop()
 
 def get_medium_distance():
+    start = timer()
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_2") \
         .getOrCreate()
-    sc = spark_session.__sc
+    sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    severity = car_accidents.map(lambda s: s.split(",")[1])
-    count = severity.map(lambda severidad: ("media", 1)).reduceByKey(add)
-    severity_columns = count.map(
-        lambda p: Row(media=p[0], cuenta=int(p[1])))
-    sqlContext = SQLContext(sc)
-    schemaMedian = sqlContext.createDataFrame(severity_columns)
-    schemaMedian.registerTempTable("ocurrencias")
-    print("La distancia media en la que ocurren los accidentes es: ")
-    sqlContext.sql(
-        "SELECT media, cuenta FROM ocurrencias order by cuenta DESC limit 1").show()
-
-
+    media = car_accidents.map(lambda s: s.split(",")[1])
+    count = media.map(lambda value: ("media", value )).reduceByKey(add)
+    print("Suma:")
+    count.count().show()
+    end = timer()
+    elapsed=end - start
+    print("Tiempo total: "+str(elapsed)+" segundos")
+    # for result in max_severities:
+    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    spark_session.stop()
 def get_most_common_side():
     start = timer()
     spark_session = SparkSession \
@@ -86,9 +85,6 @@ def get_most_common_side():
     print("Tiempo total: " + str(elapsed) + " segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
-    end = timer()
-    elapsed = end - start
-    print("Tiempo total: " + str(elapsed) + " segundos")
     spark_session.stop()
 
 def get_most_common_weather_condition():
