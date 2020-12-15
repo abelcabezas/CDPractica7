@@ -72,7 +72,7 @@ def get_most_common_side():
     sqlContext.sql(
         "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
     '''
-    print("La severidad mas comun es: ")
+    print("El lado de la calle mas comun es: ")
     sqlContext.sql(
         "SELECT lado, ocurrencias FROM lados order by ocurrencias DESC limit 1").show()
 
