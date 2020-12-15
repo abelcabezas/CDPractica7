@@ -49,7 +49,7 @@ def get_medium_distance():
     media = car_accidents.map(lambda s: s.split(",")[1])
     count = media.map(lambda value: ("media", value )).reduceByKey(add)
     numero_de_registros = type(car_accidents_file)
-    print("Suma:"+str(numero_de_registross))
+    print("Suma:"+str(numero_de_registros))
 
     end = timer()
     elapsed=end - start
