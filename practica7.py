@@ -4,8 +4,10 @@ import sys
 from operator import add
 from pyspark import SparkContext
 from pyspark.sql import SQLContext, Row, SparkSession
+from timeit import default_timer as timer
 
 def get_most_common_severity():
+    start = timer()
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_1") \
@@ -28,6 +30,9 @@ def get_most_common_severity():
     print("La severidad mas comun es: ")
     sqlContext.sql("SELECT severidad, ocurrencias FROM severidades order by ocurrencias DESC limit 1").show()
 
+    end = timer()
+    elapsed=end - start
+    print("Tiempo elapsed > "+str(elapsed))
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
