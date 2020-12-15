@@ -55,24 +55,30 @@ def get_medium_distance():
 def get_most_common_side():
     spark_session = SparkSession \
         .builder \
-        .appName("CarAccidents_Spark_03") \
+        .appName("CarAccidents_Spark_3") \
         .getOrCreate()
-    sc = spark_session.__sc
+    sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    severity = car_accidents.map(lambda s: s.split(",")[2])
-    count = severity.map(lambda side: (severidad, 1)).reduceByKey(add)
-    severity_columns = count.map(
-        lambda p: Row(side=p[0], cuenta=int(p[1])))
+    side = car_accidents.map(lambda s: s.split(",")[0])
+    count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
+    side_columns = count.map(
+        lambda p: Row(lado=p[0], ocurrencias=int(p[1])))
     sqlContext = SQLContext(sc)
-    schemaOcurences = sqlContext.createDataFrame(severity_columns)
-    schemaOcurences.registerTempTable("ocurrencias")
-    print("Los diferentes lados de la calle son: ")
+    schemaSide = sqlContext.createDataFrame(side_columns)
+    schemaSide.registerTempTable("lados")
+    '''
+    print("Los diferentes tipos de severidad son:")
     sqlContext.sql(
-        "SELECT side, cuenta FROM ocurrencias order by cuenta DESC").show()
-    print("El lado de la calle  mas comun es: ")
+        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
+    '''
+    print("La severidad mas comun es: ")
     sqlContext.sql(
-        "SELECT side, cuenta FROM ocurrencias order by cuenta DESC limit 1")
+        "SELECT lado, ocurrencias FROM lados order by ocurrencias DESC limit 1").show()
+
+    # for result in max_severities:
+    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    spark_session.stop()
 
 if __name__  == "__main__":
     if len(sys.argv) != 1 and len(sys.argv) !=2:
