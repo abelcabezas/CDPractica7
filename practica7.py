@@ -32,7 +32,7 @@ def get_most_common_severity():
 
     end = timer()
     elapsed=end - start
-    print("Tiempo elapsed > "+str(elapsed))
+    print("Tiempo total: "+str(elapsed)+" segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
@@ -40,7 +40,7 @@ def get_most_common_severity():
 def get_medium_distance():
     spark_session = SparkSession \
         .builder \
-        .appName("CarAccidents_Spark_02") \
+        .appName("CarAccidents_Spark_2") \
         .getOrCreate()
     sc = spark_session.__sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
@@ -58,6 +58,7 @@ def get_medium_distance():
 
 
 def get_most_common_side():
+    start = timer()
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_3") \
@@ -80,11 +81,18 @@ def get_most_common_side():
     print("El lado de la calle mas comun es: ")
     sqlContext.sql(
         "SELECT lado, ocurrencias FROM lados order by ocurrencias DESC limit 1").show()
-
+    end = timer()
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    end = timer()
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
     spark_session.stop()
+
 def get_most_common_weather_condition():
+    start = timer()
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_4") \
@@ -106,10 +114,13 @@ def get_most_common_weather_condition():
     '''
     print("La severidad mas comun es: ")
     sqlContext.sql("SELECT condicion_climatica, ocurrencias FROM condiciones_climaticas order by ocurrencias DESC limit 1").show()
-
+    end = timer()
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
+
 if __name__  == "__main__":
     if len(sys.argv) != 1 and len(sys.argv) !=2:
         print("Numero de argumentos no valido\n el programa toma 1 o 2 argumentos")
