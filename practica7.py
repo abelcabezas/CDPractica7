@@ -74,7 +74,6 @@ def get_most_common_side():
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
     side_columns = count.map(
         lambda p: Row(lado=p[0], ocurrencias=int(p[1]))).collect()
-    print("Tipo side columns:"+str(type(side_columns)))
     for lado, ocurrencias in side_columns:
         print("Lado: "+str(lado)+"ocurrencias: "+str(ocurrencias))
 
