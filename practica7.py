@@ -122,7 +122,7 @@ def get_visibility_occurrences_under_threshold(threshold):
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
-    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) < float(threshold)).collect()
+    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: s != None).filter(lambda s: s != '').filter(lambda s: s != " ").filter(lambda s: float(s) < float(threshold)).collect()
     print("Numero de ocurrencias bajo el umbral: " + str(len(incidents_under_v)))
     end = timer()
     elapsed = end - start
