@@ -72,8 +72,6 @@ def get_most_common_side():
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
-    side_columns = count.map(
-        lambda p: Row(lado=p[0], ocurrencias=int(p[1]))).collect()
     for lado, ocurrencias in side_columns:
         print("Lado: "+str(lado)+"ocurrencias: "+str(ocurrencias))
 
