@@ -70,7 +70,7 @@ def get_most_common_side():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
-    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).collect()
+    count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
     side_columns = count.map(
         lambda p: Row(lado=p[0], ocurrencias=int(p[1])))
     print("Tipo side columns:"+str(type(side_columns)))
@@ -112,12 +112,9 @@ def get_most_common_weather_condition():
     schemaWeather = sqlContext.createDataFrame(weather_condition_columns)
     schemaWeather.registerTempTable("condiciones_climaticas")
     '''
-    print("Los diferentes tipos de severidad son:")
-    sqlContext.sql(
-        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
-    '''
     print("La severidad mas comun es: ")
     sqlContext.sql("SELECT condicion_climatica, ocurrencias FROM condiciones_climaticas order by ocurrencias DESC limit 1").show()
+    '''
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
