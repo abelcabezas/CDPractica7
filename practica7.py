@@ -79,8 +79,7 @@ def get_most_common_side():
         lado = 'derecho'
     else:
         lado = 'izquierdo'
-    print("El lado en el que ocurren mas accidente es: " + count[-1][
-        0] + " con " + count[-1][1] + " ocurrencias.")
+    print("El lado en el que ocurren mas accidente es: " + lado+ " con " + int(count[-1][1]) + " ocurrencias.")
     print("Tiempo total: " + str(elapsed) + " segundos")
 
     spark_session.stop()
