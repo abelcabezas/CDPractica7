@@ -6,9 +6,10 @@ from pyspark import SparkContext
 from pyspark.sql import SQLContext, Row, SparkSession
 from timeit import default_timer as timer
 
+
 def get_most_common_severity():
     '''
-    Prints the most common type of severity from the car accidents dataset
+    Prints to stdout the most common type of severity from the car accidents dataset
     '''
     spark_session = SparkSession \
         .builder \
@@ -19,17 +20,20 @@ def get_most_common_severity():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     severity = car_accidents.map(lambda s: s.split(",")[0])
-    count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add).sortBy(
+    count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(
+        add).sortBy(
         lambda s: int(s[1])).collect()
 
     print(
-        "El tipo de severidad mas comun es: " + str(count[-1][0]) + " con " + str(
+        "El tipo de severidad mas comun es: " + str(
+            count[-1][0]) + " con " + str(
             count[-1][1]) + " ocurrencias.")
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
 
     spark_session.stop()
+
 
 def get_medium_distance():
     start = timer()
@@ -41,20 +45,24 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
-    list = media.map(lambda value:  value).collect()
+    list = media.map(lambda value: value).collect()
     media = sc.parallelize(list).mean
-    print("Tipo de distancia media"+str(media))
+    print("Tipo de distancia media" + str(media))
     numero_de_registros = car_accidents.count()
-    print("Numero de registros:"+str(numero_de_registros))
+    print("Numero de registros:" + str(numero_de_registros))
     end = timer()
-    elapsed=end - start
-    print("Tiempo total: "+str(elapsed)+" segundos")
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
 
-def get_most_common_side():
 
+def get_most_common_side():
+    '''
+    Prints to stdout the most common side of the street at which the car accidents
+    from the car accidents dataset happens
+    '''
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_3") \
@@ -64,21 +72,27 @@ def get_most_common_side():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
-    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(lambda s: int(s[1])).collect()
+    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(
+        lambda s: int(s[1])).collect()
     lado = ''
     if count[-1][0] == "R":
         lado = 'derecho'
     else:
         lado = 'izquierdo'
-    print("El lado en el que ocurren mas accidente es: " + lado+ " con " + str(count[-1][1]) + " ocurrencias.")
+    print(
+        "El lado en el que ocurren mas accidente es: " + lado + " con " + str(
+            count[-1][1]) + " ocurrencias.")
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
 
     spark_session.stop()
 
-def get_most_common_weather_condition():
 
+def get_most_common_weather_condition():
+    '''
+    Prints to stdout the most common type of weather condition from the car accidents dataset
+    '''
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_4") \
@@ -87,26 +101,23 @@ def get_most_common_weather_condition():
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
-    weather_condition = car_accidents.map(lambda s: s.split(",")[3])
-    count = weather_condition.map(lambda condicion: (condicion, 1)).reduceByKey(add)
-    print("Condicion climatica mas comun: "+ str(type(count.collect())))
-    weather_condition_columns = count.map(
-        lambda p: Row(condicion_climatica=p[0], ocurrencias=int(p[1])))
-    sqlContext = SQLContext(sc)
-    schemaWeather = sqlContext.createDataFrame(weather_condition_columns)
-    schemaWeather.registerTempTable("condiciones_climaticas")
-    '''
-    print("La severidad mas comun es: ")
-    sqlContext.sql("SELECT condicion_climatica, ocurrencias FROM condiciones_climaticas order by ocurrencias DESC limit 1").show()
-    '''
+    severity = car_accidents.map(lambda s: s.split(",")[3])
+    count = severity.map(lambda w_condition: (w_condition, 1)).reduceByKey(
+        add).sortBy(
+        lambda s: int(s[1])).collect()
+
+    print(
+        "El tipo de condicion meteorologica mas comun es: " + str(
+            count[-1][0]) + " con " + str(
+            count[-1][1]) + " ocurrencias.")
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
-    # for result in max_severities:
-    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
-    spark_session.stop()
-def get_visibility_occurrences_under_threshold(threshold):
 
+    spark_session.stop()
+
+
+def get_visibility_occurrences_under_threshold(threshold):
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_5") \
@@ -115,15 +126,19 @@ def get_visibility_occurrences_under_threshold(threshold):
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
-    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) <= float(threshold)).collect()
-    print("Numero de ocurrencias bajo el umbral: " + str(len(incidents_under_v)))
+    incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(
+        lambda s: float(s) <= float(threshold)).collect()
+    print(
+        "Numero de ocurrencias bajo el umbral: " + str(len(incidents_under_v)))
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
     # for result in max_severities:
     # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
-if __name__  == "__main__":
+
+
+if __name__ == "__main__":
 
     if sys.argv[1]:
         if sys.argv[1] == "1":
@@ -131,7 +146,7 @@ if __name__  == "__main__":
         elif sys.argv[1] == "2":
             get_medium_distance()
         elif sys.argv[1] == "3":
-            #DONE
+            # DONE
             get_most_common_side()
         elif sys.argv[1] == "4":
             get_most_common_weather_condition()
