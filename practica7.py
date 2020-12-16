@@ -46,7 +46,7 @@ def get_medium_distance():
         .appName("CarAccidents_Spark_2") \
         .getOrCreate()
     sc = spark_session._sc
-    car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
+    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     start = timer()
     car_accidents = sc.textFile(car_accidents_file)
     distances = car_accidents.map(lambda s: s.split(",")[1])
