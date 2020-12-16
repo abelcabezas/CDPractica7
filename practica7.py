@@ -70,9 +70,11 @@ def get_most_common_side():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
-    count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
+    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).collect()
     side_columns = count.map(
         lambda p: Row(lado=p[0], ocurrencias=int(p[1])))
+    print("Tipo side columns:"+str(type(side_columns)))
+
     sqlContext = SQLContext(sc)
     schemaSide = sqlContext.createDataFrame(side_columns)
     schemaSide.registerTempTable("lados")
