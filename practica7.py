@@ -103,6 +103,7 @@ def get_most_common_weather_condition():
     start = timer()
     weather_condition = car_accidents.map(lambda s: s.split(",")[3])
     count = weather_condition.map(lambda condicion: (condicion, 1)).reduceByKey(add)
+    print("Condicion climatica mas comun: "+ str(type(count.collect())))
     weather_condition_columns = count.map(
         lambda p: Row(condicion_climatica=p[0], ocurrencias=int(p[1])))
     sqlContext = SQLContext(sc)
