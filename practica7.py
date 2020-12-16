@@ -49,10 +49,13 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     distances = car_accidents.map(lambda s: s.split(",")[1])
-    count = distances.map(lambda distance: ("Media", distance)).collect()
-    rdd = sc.parallelize(count)
+    count = distances.map(lambda distance: ("Media", distance))
+    #rdd = sc.parallelize(count)
     #suma = rdd.values().sum()
-    print("Tipo de suma:"+str(type(rdd)))
+    df = count.toDF()
+    #print("Tipo de suma:"+str(type(rdd)))
+
+    #df_basket1.groupby('Item_group').agg({'Media': 'mean'}).show()
     '''
     list = car_accidents.map(lambda s: s.split(",")[1]).collect()
     media = sc.parallelize(list).mean.take(1)
