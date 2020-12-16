@@ -72,14 +72,14 @@ def get_most_common_side():
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(lambda s: int(s[1])).collect()
-    end = timer()
-    elapsed = end - start
     lado = ''
     if count[-1][0] == "R":
         lado = 'derecho'
     else:
         lado = 'izquierdo'
     print("El lado en el que ocurren mas accidente es: " + lado+ " con " + int(count[-1][1]) + " ocurrencias.")
+    end = timer()
+    elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
 
     spark_session.stop()
