@@ -76,20 +76,8 @@ def get_most_common_side():
         lambda p: Row(lado=p[0], ocurrencias=int(p[1]))).collect()
     print("Tipo side columns:"+str(type(side_columns)))
     for lado, ocurrencias in side_columns:
-        print("Lado:"+str(lado)+"ocurrencias:"+str(ocurrencias))
+        print("Lado: "+str(lado)+"ocurrencias: "+str(ocurrencias))
 
-
-    sqlContext = SQLContext(sc)
-    schemaSide = sqlContext.createDataFrame(side_columns)
-    schemaSide.registerTempTable("lados")
-    '''
-    print("Los diferentes tipos de severidad son:")
-    sqlContext.sql(
-        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
-    '''
-    print("El lado de la calle mas comun es: ")
-    sqlContext.sql(
-        "SELECT lado, ocurrencias FROM lados order by ocurrencias DESC limit 1").show()
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
