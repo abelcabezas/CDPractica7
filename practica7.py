@@ -46,13 +46,21 @@ def get_medium_distance():
         .appName("CarAccidents_Spark_2") \
         .getOrCreate()
     sc = spark_session._sc
+
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
+    count = severity.map(lambda distancia: ('Media',distancia)).reduceByKey(
+        add).collect()
+
+    '''
     list = car_accidents.map(lambda s: s.split(",")[1]).collect()
+
     media = sc.parallelize(list).mean.take(1)
     print("Tipo de distancia media" + str(type(media)))
+    '''
     numero_de_registros = car_accidents.count()
     print("Numero de registros:" + str(numero_de_registros))
+    print("Suma elementos = "+str(type(count)))
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
