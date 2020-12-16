@@ -77,7 +77,7 @@ def get_most_common_side():
         lado = 'derecho'
     else:
         lado = 'izquierdo'
-    print("El lado en el que ocurren mas accidente es: " + lado+ " con " + int(count[-1][1]) + " ocurrencias.")
+    print("El lado en el que ocurren mas accidente es: " + lado+ " con " + str(count[-1][1]) + " ocurrencias.")
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
