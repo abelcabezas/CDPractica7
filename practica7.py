@@ -72,15 +72,17 @@ def get_most_common_side():
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(lambda s: int(s[1])).collect()
-    print("Here we are"+count[-1][0])
-    for lado, ocurrencias in count:
-        print("Lado: "+str(lado)+"ocurrencias: "+str(ocurrencias))
-
     end = timer()
     elapsed = end - start
+    lado = ''
+    if count[-1][0] == "R":
+        lado = 'derecho'
+    else:
+        lado = 'izquierdo'
+    print("El lado en el que ocurren mas accidente es: " + count[-1][
+        0] + " con " + count[-1][1] + " ocurrencias.")
     print("Tiempo total: " + str(elapsed) + " segundos")
-    # for result in max_severities:
-    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+
     spark_session.stop()
 
 def get_most_common_weather_condition():
