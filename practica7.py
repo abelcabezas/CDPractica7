@@ -36,6 +36,10 @@ def get_most_common_severity():
 
 
 def get_medium_distance():
+    '''
+    Prints to stdout the medium distance at which the car accidents
+    from the car accidents dataset happens
+    '''
     start = timer()
     spark_session = SparkSession \
         .builder \
@@ -44,8 +48,7 @@ def get_medium_distance():
     sc = spark_session._sc
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    media = car_accidents.map(lambda s: s.split(",")[1])
-    list = media.map(lambda value: value).collect()
+    list = car_accidents.map(lambda s: s.split(",")[1]).collect()
     media = sc.parallelize(list).mean
     print("Tipo de distancia media" + str(media))
     numero_de_registros = car_accidents.count()
@@ -118,6 +121,10 @@ def get_most_common_weather_condition():
 
 
 def get_visibility_occurrences_under_threshold(threshold):
+    '''
+    Prints to stdout the number of accidents that happens under a
+    visibility threshold given to the program as an argument
+    '''
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_5") \
@@ -133,8 +140,6 @@ def get_visibility_occurrences_under_threshold(threshold):
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
-    # for result in max_severities:
-    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
     spark_session.stop()
 
 
