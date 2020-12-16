@@ -137,7 +137,7 @@ def get_visibility_occurrences_under_threshold(threshold):
         .appName("CarAccidents_Spark_5") \
         .getOrCreate()
     sc = spark_session._sc
-    car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
+    car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) < float(threshold)).collect()
     print("Tipo incidents_under_v: "+str(type(incidents_under_v)))
