@@ -53,6 +53,7 @@ def get_medium_distance():
     #rdd = sc.parallelize(count)
     #suma = rdd.values().sum()
     df = count.toDF()
+    df.printSchema()
     #print("Tipo de suma:"+str(type(rdd)))
 
     #df_basket1.groupby('Item_group').agg({'Media': 'mean'}).show()
