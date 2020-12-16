@@ -49,7 +49,8 @@ def get_medium_distance():
 
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
-    count = severity.map(lambda distancia: ('Media',distancia)).reduceByKey(
+    distance = car_accidents.map(lambda s: s.split(",")[0])
+    count = distance.map(lambda distancia: ('Media',distancia)).reduceByKey(
         add).collect()
 
     '''
