@@ -73,7 +73,7 @@ def get_most_common_side():
     side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
     side_columns = count.map(
-        lambda p: Row(lado=p[0], ocurrencias=int(p[1])))
+        lambda p: Row(lado=p[0], ocurrencias=int(p[1]))).collect()
     print("Tipo side columns:"+str(type(side_columns)))
 
     sqlContext = SQLContext(sc)
