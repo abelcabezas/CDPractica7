@@ -7,7 +7,7 @@ from pyspark.sql import SQLContext, Row, SparkSession
 from timeit import default_timer as timer
 
 def get_most_common_severity():
-    start = timer()
+
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_1") \
@@ -15,6 +15,7 @@ def get_most_common_severity():
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
+    start = timer()
     severity = car_accidents.map(lambda s: s.split(",")[0])
     count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add)
     severity_columns = count.map(
@@ -68,7 +69,7 @@ def get_medium_distance():
     spark_session.stop()
 
 def get_most_common_side():
-    start = timer()
+
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_3") \
@@ -76,6 +77,7 @@ def get_most_common_side():
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
+    start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
     count = side.map(lambda lado: (lado, 1)).reduceByKey(add)
     side_columns = count.map(
@@ -99,7 +101,7 @@ def get_most_common_side():
     spark_session.stop()
 
 def get_most_common_weather_condition():
-    start = timer()
+
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_4") \
@@ -107,6 +109,7 @@ def get_most_common_weather_condition():
     sc = spark_session._sc
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
+    start = timer()
     weather_condition = car_accidents.map(lambda s: s.split(",")[3])
     count = weather_condition.map(lambda condicion: (condicion, 1)).reduceByKey(add)
     weather_condition_columns = count.map(
@@ -137,10 +140,12 @@ def get_visibility_occurrences_under_threshold(threshold):
     car_accidents_file = "/user/practica7/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) < float(threshold))
-
+    print("Tipo incidents_under_v: "+str(type(incidents_under_v)))
+    '''
     sqlContext = SQLContext(sc)
     schemaUnderThreshold = sqlContext.createDataFrame(incidents_under_v)
     schemaUnderThreshold.show()
+    '''
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
