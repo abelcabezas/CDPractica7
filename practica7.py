@@ -71,7 +71,7 @@ def get_most_common_side():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     side = car_accidents.map(lambda s: s.split(",")[2])
-    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(lambda s: int(s[1])).collect()
+    count = side.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(ascending = true,lambda s: int(s[1])).collect()
     for lado, ocurrencias in count:
         print("Lado: "+str(lado)+"ocurrencias: "+str(ocurrencias))
 
