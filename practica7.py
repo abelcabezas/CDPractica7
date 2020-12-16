@@ -48,17 +48,8 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
-    count = media.map(lambda value: ("Media", value))
-
-    '''
-    media_columns = count.map(
-        lambda p: Row(media=p[0], valor=float(p[1])))
-    sqlContext = SQLContext(sc)
-    schemaMedia = sqlContext.createDataFrame(media_columns)
-    sqlContext.select("media").show()
-    '''
-    print("Tipo de var count: " + str(type(count)))
-    print("Tipo de media: "+str(type(media)))
+    count = media.map(lambda value: ("Media", value)).collect()
+    print("Tipo de distancia media"+str(type(count)))
     numero_de_registros = car_accidents.count()
     print("Numero de registros:"+str(numero_de_registros))
     end = timer()
