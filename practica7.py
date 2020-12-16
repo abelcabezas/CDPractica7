@@ -19,7 +19,7 @@ def get_most_common_severity():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     severity = car_accidents.map(lambda s: s.split(",")[0])
-    count = severity.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(
+    count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add).sortBy(
         lambda s: int(s[1])).collect()
 
     print(
