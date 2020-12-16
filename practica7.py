@@ -48,8 +48,9 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
-    count = media.map(lambda value: ("Media", value)).mean()
-    print("Tipo de distancia media"+str(count))
+    list = media.map(lambda value: ("Media", value)).collect()
+    media = sc.parallelize(list).mean
+    print("Tipo de distancia media"+str(media))
     numero_de_registros = car_accidents.count()
     print("Numero de registros:"+str(numero_de_registros))
     end = timer()
