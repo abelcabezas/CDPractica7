@@ -51,8 +51,8 @@ def get_medium_distance():
     distances = car_accidents.map(lambda s: s.split(",")[1])
     count = distances.map(lambda distance: ("Media", distance)).collect()
     rdd = sc.parallelize(count)
-    suma = rdd.values().sum()
-    print("Tipo de suma:"+str(type(suma)))
+    #suma = rdd.values().sum()
+    print("Tipo de suma:"+str(type(rdd)))
     '''
     list = car_accidents.map(lambda s: s.split(",")[1]).collect()
     media = sc.parallelize(list).mean.take(1)
