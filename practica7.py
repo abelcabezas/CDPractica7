@@ -75,9 +75,9 @@ def get_most_common_side():
     side_columns = count.map(
         lambda p: Row(lado=p[0], ocurrencias=int(p[1]))).collect()
     print("Tipo side columns:"+str(type(side_columns)))
-    for i in side_columns:
-        print("Tipo!!")
-        print(str(type(i)))
+    for lado, ocurrencias in side_columns:
+        print("Lado:"+str(lado)+"ocurrencias:"+str(ocurrencias))
+
 
     sqlContext = SQLContext(sc)
     schemaSide = sqlContext.createDataFrame(side_columns)
