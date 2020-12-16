@@ -40,32 +40,20 @@ def get_medium_distance():
     Prints to stdout the medium distance at which the car accidents
     from the car accidents dataset happens
     '''
-    start = timer()
+
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_2") \
         .getOrCreate()
     sc = spark_session._sc
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
+    start = timer()
     car_accidents = sc.textFile(car_accidents_file)
     distances = car_accidents.map(lambda s: s.split(",")[1])
     count = distances.map(lambda distance: ("Media", distance))
-    #rdd = sc.parallelize(count)
-    #suma = rdd.values().sum()
     df = count.toDF()
-    df.printSchema()
     df.groupby("_1").agg({'_2': 'mean'}).show()
-    #print("Tipo de suma:"+str(type(rdd)))
 
-    #df_basket1.groupby('Item_group').agg({'Media': 'mean'}).show()
-    '''
-    list = car_accidents.map(lambda s: s.split(",")[1]).collect()
-    media = sc.parallelize(list).mean.take(1)
-    print("Tipo de distancia media" + str(type(media)))
-    print("Suma: "+str(suma))
-    numero_de_registros = car_accidents.count()
-    print("Numero de registros:" + str(numero_de_registros))
-    '''
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
