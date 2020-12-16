@@ -7,7 +7,9 @@ from pyspark.sql import SQLContext, Row, SparkSession
 from timeit import default_timer as timer
 
 def get_most_common_severity():
-
+    '''
+    Prints the most common type of severity from the car accidents dataset
+    '''
     spark_session = SparkSession \
         .builder \
         .appName("CarAccidents_Spark_1") \
@@ -17,25 +19,16 @@ def get_most_common_severity():
     car_accidents = sc.textFile(car_accidents_file)
     start = timer()
     severity = car_accidents.map(lambda s: s.split(",")[0])
-    count = severity.map(lambda severidad: (severidad, 1)).reduceByKey(add)
-    severity_columns = count.map(
-        lambda p: Row(severidad=p[0], ocurrencias=int(p[1])))
-    sqlContext = SQLContext(sc)
-    schemaSeverity = sqlContext.createDataFrame(severity_columns)
-    schemaSeverity.registerTempTable("severidades")
-    '''
-    print("Los diferentes tipos de severidad son:")
-    sqlContext.sql(
-        "SELECT severidad, ocurrencias FROM severidades order by cuenta 		DESC").show()
-    '''
-    print("La severidad mas comun es: ")
-    sqlContext.sql("SELECT severidad, ocurrencias FROM severidades order by ocurrencias DESC limit 1").show()
+    count = severity.map(lambda lado: (lado, 1)).reduceByKey(add).sortBy(
+        lambda s: int(s[1])).collect()
 
+    print(
+        "El tipo de severidad mas comun es: " + str(count[-1][0]) + " con " + str(
+            count[-1][1]) + " ocurrencias.")
     end = timer()
-    elapsed=end - start
-    print("Tiempo total: "+str(elapsed)+" segundos")
-    # for result in max_severities:
-    # print("Severidad: "+str(result.severity)+" Numero de 	ocurrencias: "+str(result.cuenta.value))
+    elapsed = end - start
+    print("Tiempo total: " + str(elapsed) + " segundos")
+
     spark_session.stop()
 
 def get_medium_distance():
@@ -138,6 +131,7 @@ if __name__  == "__main__":
         elif sys.argv[1] == "2":
             get_medium_distance()
         elif sys.argv[1] == "3":
+            #DONE
             get_most_common_side()
         elif sys.argv[1] == "4":
             get_most_common_weather_condition()
