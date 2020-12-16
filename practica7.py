@@ -49,7 +49,7 @@ def get_medium_distance():
     car_accidents_file = "/user/practica6/preprocessed_car_accidents.csv"
     car_accidents = sc.textFile(car_accidents_file)
     distances = car_accidents.map(lambda s: s.split(",")[1])
-    count = severity.map(lambda distance: ("Media", distance)).collect()
+    count = distances.map(lambda distance: ("Media", distance)).collect()
     for media,distancia in count:
         print("I: "+str(media)+ "N :"+str(distancia))
     '''
