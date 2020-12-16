@@ -49,7 +49,7 @@ def get_medium_distance():
     car_accidents = sc.textFile(car_accidents_file)
     media = car_accidents.map(lambda s: s.split(",")[1])
     count = media.map(lambda value: ("Media", value)).collect()
-    print("Tipo de distancia media"+str(type(count)))
+    print("Tipo de distancia media"+str(count[0]))
     numero_de_registros = car_accidents.count()
     print("Numero de registros:"+str(numero_de_registros))
     end = timer()
@@ -133,7 +133,6 @@ def get_visibility_occurrences_under_threshold(threshold):
     start = timer()
     incidents_under_v = car_accidents.map(lambda s: s.split(",")[4]).filter(lambda s: float(s) < float(threshold)).collect()
     print("Numero de ocurrencias bajo el umbral: " + str(len(incidents_under_v)))
-
     end = timer()
     elapsed = end - start
     print("Tiempo total: " + str(elapsed) + " segundos")
